@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2 style="color: aliceblue;">Doctor Dashboard</h2>
+            <ul>
+                <li><a href="#appointments">Appointments</a></li>
+                <li><a href="#patient-records">Patient Records</a></li>
+                <li><a href="#update-availability">Update Availability</a></li>
+                <li><a href="#blood-stock">Blood Stock</a></li>
+                <li><a href="#prescriptions">Prescriptions</a></li>
+                <li><a href="#search-appointments">Search Appointments</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>Welcome, Doctor</h1>
+
+            <!-- Appointments Section -->
+            <section id="appointments">
+                <h3>Your Appointments</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointments-table">
+                        <!-- Dynamic appointments will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Patient Records Section -->
+            <section id="patient-records">
+                <h3>Patient Records</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Diagnosis</th>
+                            <th>Treatment</th>
+                            <th>Last Visit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patient-records-table">
+                        <!-- Dynamic patient records will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Update Availability Section -->
+            <section id="update-availability">
+                <h3>Update Your Availability</h3>
+                <form id="availability-form">
+                    <label for="availability-date">Date:</label>
+                    <input type="date" id="availability-date" required>
+                    <label for="availability-time">Time:</label>
+                    <input type="time" id="availability-time" required>
+                    <button type="submit">Update Availability</button>
+                </form>
+            </section>
+
+            <!-- Blood Stock Section -->
+            <section id="blood-stock">
+                <h3>Available Blood Stock</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Blood Type</th>
+                            <th>Quantity (Units)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blood-stock-table">
+                        <!-- Dynamic blood stock rows will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Prescriptions Section -->
+            <section id="prescriptions">
+                <h3>Manage Prescriptions</h3>
+                <form id="prescription-form">
+                    <label for="patient-name-prescription">Patient Name:</label>
+                    <input type="text" id="patient-name-prescription" required>
+                    <label for="prescription-details">Prescription Details:</label>
+                    <textarea id="prescription-details" required></textarea>
+                    <button type="submit">Add Prescription</button>
+                </form>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Prescription</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prescriptions-table">
+                        <!-- Dynamic prescriptions will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Search Appointments Section -->
+            <section id="search-appointments">
+                <h3>Search Appointments</h3>
+                <form id="search-appointments-form">
+                    <label for="search-patient-name">Patient Name:</label>
+                    <input type="text" id="search-patient-name">
+                    <label for="search-date">Date:</label>
+                    <input type="date" id="search-date">
+                    <button type="submit">Search</button>
+                </form>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="search-results">
+                        <!-- Search results will be displayed here -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Mock Data
+        const appointments = [
+            { patient: 'Dinesh', date: '2024-12-17', time: '10:00 AM', status: 'Confirmed' },
+            { patient: 'Raju', date: '2024-12-18', time: '02:00 PM', status: 'Pending' },
+        ];
+
+        const patientRecords = [
+            { patient: 'Dinesh', diagnosis: 'Flu', treatment: 'Rest and hydration', lastVisit: '2024-12-10' },
+            { patient: 'Shivu', diagnosis: 'Back pain', treatment: 'Physical therapy', lastVisit: '2024-12-12' },
+        ];
+
+        const bloodStock = [
+            { type: 'A+', quantity: 10 },
+            { type: 'B+', quantity: 8 },
+            { type: 'O-', quantity: 5 },
+        ];
+
+        const prescriptions = [
+            { patient: 'Dinesh', prescription: 'Paracetamol 500mg', date: '2024-12-10' },
+            { patient: 'Jane Smith', prescription: 'Ibuprofen 200mg', date: '2024-12-12' },
+        ];
+
+        // Populate Appointments Table
+        const appointmentsTable = document.getElementById('appointments-table');
+        function renderAppointments() {
+            appointmentsTable.innerHTML = '';
+            appointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.patient}</td>
+                    <td>${appointment.date}</td>
+                    <td>${appointment.time}</td>
+                    <td>${appointment.status}</td>
+                `;
+                appointmentsTable.appendChild(row);
+            });
+        }
+
+        // Populate Patient Records Table
+        const patientRecordsTable = document.getElementById('patient-records-table');
+        function renderPatientRecords() {
+            patientRecordsTable.innerHTML = '';
+            patientRecords.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.patient}</td>
+                    <td>${record.diagnosis}</td>
+                    <td>${record.treatment}</td>
+                    <td>${record.lastVisit}</td>
+                `;
+                patientRecordsTable.appendChild(row);
+            });
+        }
+
+        // Populate Blood Stock Table
+        const bloodStockTable = document.getElementById('blood-stock-table');
+        function renderBloodStock() {
+            bloodStockTable.innerHTML = '';
+            bloodStock.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stock.type}</td>
+                    <td>${stock.quantity}</td>
+                `;
+                bloodStockTable.appendChild(row);
+            });
+        }
+
+        // Populate Prescriptions Table
+        const prescriptionsTable = document.getElementById('prescriptions-table');
+        function renderPrescriptions() {
+            prescriptionsTable.innerHTML = '';
+            prescriptions.forEach(prescription => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${prescription.patient}</td>
+                    <td>${prescription.prescription}</td>
+                    <td>${prescription.date}</td>
+                `;
+                prescriptionsTable.appendChild(row);
+            });
+        }
+
+        // Search Appointments Form
+        const searchAppointmentsForm = document.getElementById('search-appointments-form');
+        searchAppointmentsForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const patientName = document.getElementById('search-patient-name').value.toLowerCase();
+            const date = document.getElementById('search-date').value;
+
+            const filteredAppointments = appointments.filter(appointment => {
+                return (patientName ? appointment.patient.toLowerCase().includes(patientName) : true) &&
+                    (date ? appointment.date === date : true);
+            });
+
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = '';
+            filteredAppointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.patient}</td>
+                    <td>${appointment.date}</td>
+                    <td>${appointment.time}</td>
+                `;
+                searchResults.appendChild(row);
+            });
+        });
+
+        // Availability Form
+        const availabilityForm = document.getElementById('availability-form');
+        availabilityForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const date = document.getElementById('availability-date').value;
+            const time = document.getElementById('availability-time').value;
+
+            alert(`Availability updated for ${date} at ${time}`);
+            availabilityForm.reset();
+        });
+
+        // Prescription Form
+        const prescriptionForm = document.getElementById('prescription-form');
+        prescriptionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const patientName = document.getElementById('patient-name-prescription').value;
+            const prescriptionDetails = document.getElementById('prescription-details').value;
+            const date = new Date().toISOString().split('T')[0]; // Current date
+
+            prescriptions.push({ patient: patientName, prescription: prescriptionDetails, date });
+            alert(`Prescription added for ${patientName}`);
+            renderPrescriptions();
+            prescriptionForm.reset();
+        });
+
+        // Initial Render
+        renderAppointments();
+        renderPatientRecords();
+        renderBloodStock();
+        renderPrescriptions();
+    </script>
+</body>
+</html>

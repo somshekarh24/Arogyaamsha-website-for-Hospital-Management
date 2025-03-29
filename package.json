@@ -1,0 +1,22 @@
+{
+    "name": "arogyaamsha",
+    "version": "1.0.0",
+    "description": "A hospital management system.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.3",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "http-proxy-middleware": "^3.0.3",
+        "mongoose": "^8.9.2",
+        "python-shell": "^5.0.0"
+    },
+    "devDependencies": {},
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

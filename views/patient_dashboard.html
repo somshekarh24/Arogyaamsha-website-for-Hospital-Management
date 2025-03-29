@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2 style="color: aliceblue">Patient Dashboard</h2>
+        <ul>
+          <li><a href="#book-appointment">Book Appointment</a></li>
+          <li><a href="#medical-records">Medical Records</a></li>
+          <li><a href="#blood-stock">Blood Stock</a></li>
+          <li><a href="#donor-list">Donor List</a></li>
+          <li><a href="#update-profile">Update Profile</a></li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <h1>Welcome to Your Dashboard</h1>
+
+        <!-- Book Appointment Section -->
+        <section id="book-appointment">
+          <h3>Book an Appointment</h3>
+          <form id="appointment-form">
+            <label for="doctor-name">Doctor:</label>
+            <select id="doctor-name" required>
+              <option value="Dr. John Doe">Dr. John Doe</option>
+              <option value="Dr. Jane Smith">Dr. Jane Smith</option>
+              <option value="Dr. Emily White">Dr. Emily White</option>
+            </select>
+            <label for="appointment-date">Date:</label>
+            <input type="date" id="appointment-date" required />
+            <label for="appointment-time">Time:</label>
+            <input type="time" id="appointment-time" required />
+            <button type="submit">Book Appointment</button>
+          </form>
+        </section>
+
+        <!-- Medical Records Section -->
+        <section id="medical-records">
+          <h3>Your Medical Records</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Diagnosis</th>
+                <th>Treatment</th>
+              </tr>
+            </thead>
+            <tbody id="medical-records-table">
+              <!-- Dynamic records will be added here -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Blood Stock Section -->
+        <section id="blood-stock">
+          <h3>Available Blood Stock</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Blood Type</th>
+                <th>Quantity (Units)</th>
+              </tr>
+            </thead>
+            <tbody id="blood-stock-table">
+              <!-- Dynamic blood stock rows will be added here -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Donor List Section -->
+        <section id="donor-list">
+          <h3>Donor List</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Blood Type</th>
+                <th>Contact</th>
+              </tr>
+            </thead>
+            <tbody id="donor-table">
+              <!-- Dynamic donor rows will be added here -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Update Profile Section -->
+        <section id="update-profile">
+          <h3>Update Your Profile</h3>
+          <form id="update-profile-form">
+            <label for="patient-name">Name:</label>
+            <input type="text" id="patient-name" required />
+            <label for="patient-contact">Contact:</label>
+            <input type="text" id="patient-contact" required />
+            <button type="submit">Update Profile</button>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      // Mock Data
+      const medicalRecords = [
+        {
+          date: "2024-11-10",
+          diagnosis: "Flu",
+          treatment: "Rest and hydration",
+        },
+        {
+          date: "2024-11-20",
+          diagnosis: "Back pain",
+          treatment: "Physical therapy",
+        },
+      ];
+
+      const bloodStock = [
+        { type: "A+", quantity: 10 },
+        { type: "B+", quantity: 8 },
+        { type: "O-", quantity: 5 },
+      ];
+
+      const donors = [
+        { name: "John Doe", type: "A+", contact: "123-456-7890" },
+        { name: "Jane Smith", type: "B+", contact: "987-654-3210" },
+      ];
+
+      // Populate Medical Records Table
+      const medicalRecordsTable = document.getElementById(
+        "medical-records-table"
+      );
+      function renderMedicalRecords() {
+        medicalRecordsTable.innerHTML = "";
+        medicalRecords.forEach((record) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${record.date}</td>
+                    <td>${record.diagnosis}</td>
+                    <td>${record.treatment}</td>
+                `;
+          medicalRecordsTable.appendChild(row);
+        });
+      }
+
+      // Populate Blood Stock Table
+      const bloodStockTable = document.getElementById("blood-stock-table");
+      function renderBloodStock() {
+        bloodStockTable.innerHTML = "";
+        bloodStock.forEach((stock) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${stock.type}</td>
+                    <td>${stock.quantity}</td>
+                `;
+          bloodStockTable.appendChild(row);
+        });
+      }
+
+      // Populate Donor Table
+      const donorTable = document.getElementById("donor-table");
+      function renderDonors() {
+        donorTable.innerHTML = "";
+        donors.forEach((donor) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${donor.name}</td>
+                    <td>${donor.type}</td>
+                    <td>${donor.contact}</td>
+                `;
+          donorTable.appendChild(row);
+        });
+      }
+
+      // Book Appointment Form
+      const appointmentForm = document.getElementById("appointment-form");
+      appointmentForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const doctor = document.getElementById("doctor-name").value;
+        const date = document.getElementById("appointment-date").value;
+        const time = document.getElementById("appointment-time").value;
+
+        alert(`Appointment booked with ${doctor} on ${date} at ${time}`);
+        appointmentForm.reset();
+      });
+
+      // Update Profile Form
+      const updateProfileForm = document.getElementById("update-profile-form");
+      updateProfileForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("patient-name").value;
+        const contact = document.getElementById("patient-contact").value;
+
+        alert(`Profile updated for ${name} with contact: ${contact}`);
+        updateProfileForm.reset();
+      });
+
+      // Initial Render
+      renderMedicalRecords();
+      renderBloodStock();
+      renderDonors();
+    </script>
+    
+  </body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard - Arogyaamsha</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <style>
+    /* Chatbot styles */
+    #chatbot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+    }
+
+    #chatbot-header {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    #chatbot-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    #chatbot-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      border-radius: 0 0 0 10px;
+    }
+
+    #chatbot-input button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 0 0 10px 0;
+    }
+
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- <h1>Welcome to Patient Dashboard</h1> -->
+
+  <!-- Chatbot -->
+  <div id="chatbot">
+    <div id="chatbot-header">Arogyaamsha Chatbot</div>
+    <div id="chatbot-messages"></div>
+    <div id="chatbot-input">
+      <input type="text" id="chatbot-user-input" placeholder="Ask something..." />
+      <button id="chatbot-send">Send</button>
+    </div>
+  </div>
+  <button id="chatbot-toggle">Chat</button>
+
+  <script>
+    // Chatbot functionality
+    const chatbot = document.getElementById('chatbot');
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    const chatbotInput = document.getElementById('chatbot-user-input');
+    const chatbotSend = document.getElementById('chatbot-send');
+
+    // Toggle chatbot visibility
+    chatbotToggle.addEventListener('click', () => {
+      chatbot.style.display = chatbot.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    // Send message to chatbot
+    chatbotSend.addEventListener('click', sendMessage);
+
+    // Trigger send on Enter key
+    chatbotInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const userMessage = chatbotInput.value.trim();
+      if (!userMessage) return;
+
+      // Display user message
+      const userMessageDiv = document.createElement('div');
+      userMessageDiv.textContent = `You: ${userMessage}`;
+      chatbotMessages.appendChild(userMessageDiv);
+
+      // Simulate chatbot response
+      const botMessageDiv = document.createElement('div');
+      chatbotMessages.appendChild(botMessageDiv);
+
+      // Scroll to the latest message
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+      // Simulate a response from the chatbot
+      setTimeout(() => {
+        botMessageDiv.textContent = `Bot: ${getChatbotResponse(userMessage)}`;
+      }, 1000);
+
+      chatbotInput.value = '';
+    }
+
+    // Basic chatbot response logic
+    function getChatbotResponse(message) {
+      const lowerMessage = message.toLowerCase();
+      if (lowerMessage.includes('appointment')) {
+        return 'You can book an appointment in the "Appointments" section.';
+      } else if (lowerMessage.includes('blood stock')) {
+        return 'You can check the blood stock availability in the "Blood Stock" section.';
+      } else if (lowerMessage.includes('bed availability')) {
+        return 'The bed availability details are displayed in the "Bed Availability" section.';
+      } else {
+        return "I'm here to help! Please ask about appointments, blood stock, or bed availability.";
+      }
+    }
+  </script>
+</body>
+</html>

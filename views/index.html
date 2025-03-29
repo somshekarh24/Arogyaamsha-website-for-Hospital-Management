@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arogyaamsha AI Chat</title>
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        background-color: #f0f2f5;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #1a73e8;
+        margin-bottom: 20px;
+      }
+
+      .input-container {
+        margin-bottom: 20px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        font-size: 16px;
+      }
+
+      button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #1557b0;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .response-container {
+        margin-top: 20px;
+        display: none;
+      }
+
+      .response-content {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+      }
+
+      .loading {
+        text-align: center;
+        display: none;
+      }
+
+      .loading::after {
+        content: "⋮";
+        animation: loading 1s infinite;
+        font-size: 24px;
+      }
+
+      @keyframes loading {
+        0% {
+          content: "⋮";
+        }
+        33% {
+          content: "⋯";
+        }
+        66% {
+          content: "⋰";
+        }
+        100% {
+          content: "⋮";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Gemini AI Chat</h1>
+      <div class="input-container">
+        <textarea
+          id="prompt"
+          placeholder="Enter your prompt here..."
+        ></textarea>
+      </div>
+      <button id="generate">Generate Response</button>
+      <div class="loading" id="loading"></div>
+      <div class="response-container" id="response-container">
+        <h3>Response:</h3>
+        <div class="response-content" id="response-content"></div>
+      </div>
+    </div>
+    <!-- <script src="js/app.js"></script> -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const promptInput = document.getElementById("prompt");
+        const generateButton = document.getElementById("generate");
+        const loadingDiv = document.getElementById("loading");
+        const responseContainer = document.getElementById("response-container");
+        const responseContent = document.getElementById("response-content");
+
+        async function generateResponse() {
+          const prompt = promptInput.value.trim();
+
+          if (!prompt) return;
+
+          try {
+            // Show loading state
+            generateButton.disabled = true;
+            loadingDiv.style.display = "block";
+            responseContainer.style.display = "none";
+
+            const response = await fetch("/api/generate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ prompt }),
+            });
+
+            const data = await response.json();
+
+            // Display response
+            responseContent.textContent = data.response;
+            responseContainer.style.display = "block";
+          } catch (error) {
+            console.error("Error:", error);
+            responseContent.textContent =
+              "Error generating response. Please try again.";
+            responseContainer.style.display = "block";
+          } finally {
+            // Hide loading state
+            generateButton.disabled = false;
+            loadingDiv.style.display = "none";
+          }
+        }
+
+        generateButton.addEventListener("click", generateResponse);
+        promptInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && e.ctrlKey) {
+            generateResponse();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Officer Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2 style="color: aliceblue;">Dashboard</h2>
+            <ul>
+                <li><a href="#blood-stock">Blood Stock</a></li>
+                <li><a href="#update-blood-stock">Update Stock</a></li>
+                <li><a href="#donor-info">Donor Information</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>Blood Officer Dashboard</h1>
+            
+            <!-- Blood Stock Section -->
+            <section id="blood-stock">
+                <h3>Blood Stock</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Blood Type</th>
+                            <th>Quantity (Units)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blood-stock-table">
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Update Blood Stock Section -->
+            <section id="update-blood-stock">
+                <h3>Update Blood Stock</h3>
+                <form id="update-stock-form">
+                    <label for="update-blood-type">Blood Type:</label>
+                    <select id="update-blood-type" required>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                    <label for="update-quantity">Quantity (Units):</label>
+                    <input type="number" id="update-quantity" min="1" required>
+                    <label for="update-action">Action:</label>
+                    <select id="update-action" required>
+                        <option value="add">Add to Stock</option>
+                        <option value="supply">Supply from Stock</option>
+                    </select>
+                    <button type="submit">Update Stock</button>
+                </form>
+            </section>
+
+            <!-- Donor Information Section -->
+            <section id="donor-info">
+                <h3>Donor Information</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Blood Type</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donor-table">
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+
+                <h3>Add New Donor</h3>
+                <form id="add-donor-form">
+                    <label for="donor-name">Name:</label>
+                    <input type="text" id="donor-name" required>
+                    <label for="donor-blood-type">Blood Type:</label>
+                    <select id="donor-blood-type" required>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                    <label for="donor-contact">Contact:</label>
+                    <input type="text" id="donor-contact" required>
+                    <button type="submit">Add Donor</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Mock Data
+        const bloodStock = [
+            { type: 'A+', quantity: 10 },
+            { type: 'B+', quantity: 8 },
+            { type: 'O-', quantity: 5 },
+        ];
+
+        const donors = [
+            { name: 'John Doe', type: 'A+', contact: '123-456-7890' },
+            { name: 'Jane Smith', type: 'B+', contact: '987-654-3210' },
+        ];
+
+        // Populate Blood Stock Table
+        const bloodStockTable = document.getElementById('blood-stock-table');
+        function renderBloodStock() {
+            bloodStockTable.innerHTML = '';
+            bloodStock.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stock.type}</td>
+                    <td>${stock.quantity}</td>
+                `;
+                bloodStockTable.appendChild(row);
+            });
+        }
+
+        // Update Blood Stock Form
+        const updateStockForm = document.getElementById('update-stock-form');
+        updateStockForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const bloodType = document.getElementById('update-blood-type').value;
+            const quantity = parseInt(document.getElementById('update-quantity').value);
+            const action = document.getElementById('update-action').value;
+
+            const stock = bloodStock.find(item => item.type === bloodType);
+            if (stock) {
+                if (action === 'add') {
+                    stock.quantity += quantity;
+                } else if (action === 'supply') {
+                    stock.quantity = Math.max(0, stock.quantity - quantity); // Prevent negative stock
+                }
+            } else if (action === 'add') {
+                bloodStock.push({ type: bloodType, quantity });
+            }
+
+            renderBloodStock();
+            updateStockForm.reset();
+        });
+
+        // Populate Donor Table
+        const donorTable = document.getElementById('donor-table');
+        function renderDonors() {
+            donorTable.innerHTML = '';
+            donors.forEach(donor => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${donor.name}</td>
+                    <td>${donor.type}</td>
+                    <td>${donor.contact}</td>
+                `;
+                donorTable.appendChild(row);
+            });
+        }
+
+        // Add Donor Form
+        const addDonorForm = document.getElementById('add-donor-form');
+        addDonorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('donor-name').value;
+            const bloodType = document.getElementById('donor-blood-type').value;
+            const contact = document.getElementById('donor-contact').value;
+
+            donors.push({ name, type: bloodType, contact });
+            renderDonors();
+            addDonorForm.reset();
+        });
+
+        // Initial Render
+        renderBloodStock();
+        renderDonors();
+    </script>
+</body>
+</html>
