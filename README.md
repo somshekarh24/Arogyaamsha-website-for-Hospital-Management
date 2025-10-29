@@ -28,7 +28,11 @@ Arogyaamsha is a comprehensive hospital management system designed to streamline
 - App structure: views for pages, public/ for static assets, server.js for routes and configuration
 
 ## Screenshots
+
+## Create Account
 <img src="./a11.png"></img>
+
+## Login Page
 <img src="./a12.png"></img>
 
 ## Docter Dashboard
